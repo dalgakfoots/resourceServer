@@ -13,7 +13,9 @@ public class ResourceRepository {
     private final EntityManager em;
 
 
-    public UserInfoEntity getUserInfoUsingSub(String sub) {
-        return em.find(UserInfoEntity.class, sub);
+    public UserInfoEntity getUserInfoUsingSub(String email) {
+        return em.createQuery("select u from UserInfoEntity u where u.email = :email", UserInfoEntity.class)
+                .setParameter("email", email)
+                .getSingleResult();
     }
 }

@@ -1,6 +1,7 @@
 package onthelive.kr.resourceServer;
 
 import lombok.RequiredArgsConstructor;
+import onthelive.kr.resourceServer.entity.LoginEntity;
 import onthelive.kr.resourceServer.entity.UserInfoEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +18,7 @@ public class InitData {
     @PostConstruct
     public void init(){
         initData.initUserInfo();
+        initData.initLoginUser();
     }
 
     @Component
@@ -35,6 +37,15 @@ public class InitData {
                     true
             );
             em.persist(userInfo);
+        }
+
+        public void initLoginUser(){
+            LoginEntity loginEntity = new LoginEntity(
+                    "alice.wonderland@example.com",
+                    "a1s2d3"
+            );
+
+            em.persist(loginEntity);
         }
 
     }
