@@ -42,7 +42,7 @@ public class InitData {
         public void initLoginUser(){
             LoginEntity loginEntity = new LoginEntity(
                     "alice.wonderland@example.com",
-                    "a1s2d3"
+                    "{bcrypt}$2a$10$xoDA8UQtZlZNE.ru8rpaouD1bUZiBlyTfiqw3Tm3v.Cq/I6m3dZKO"
             );
 
             em.persist(loginEntity);

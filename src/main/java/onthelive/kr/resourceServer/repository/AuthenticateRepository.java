@@ -16,11 +16,10 @@ public class AuthenticateRepository {
     public LoginEntity actionLogin(LoginEntity requestLoginEntity){
         try {
             LoginEntity result = em.createQuery(
-                            "select l from LoginEntity l where l.email =:email and l.password =:password",
+                            "select l from LoginEntity l where l.email =:email",
                             LoginEntity.class
                     )
                     .setParameter("email", requestLoginEntity.getEmail())
-                    .setParameter("password", requestLoginEntity.getPassword())
                     .getSingleResult();
             return result;
         } catch (NoResultException e){

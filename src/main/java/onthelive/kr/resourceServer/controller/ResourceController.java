@@ -11,6 +11,7 @@ import onthelive.kr.resourceServer.service.ResourceService;
 import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,6 +26,7 @@ public class ResourceController {
 
     private final ResourceService resourceService;
     private final AuthenticateService authenticateService;
+    private final PasswordEncoder passwordEncoder;
 
     @PostMapping("/resource")
     public ResponseEntity postResource(HttpServletRequest request){
@@ -71,15 +73,17 @@ public class ResourceController {
 
     @PostMapping("/authenticate")
     public ResponseEntity postAuthenticate(HttpServletRequest request) {
-        String email = request.getParameter("email");
-        String rawPassword = request.getParameter("password");
+        String email = request.getParameter("email") == null ? "" : request.getParameter("email");
+        String rawPassword = request.getParameter("password") == null ?
+                "" : request.getParameter("password");
 
         // TODO 사용자 검증 절차 추가
-        log.info("Authenticating ... email = "+ email + " / raw password = "+ rawPassword);
         LoginEntity requestLoginEntity = new LoginEntity(email, rawPassword);
         LoginEntity loginEntity = authenticateService.actionLogin(requestLoginEntity);
 
-        if(loginEntity != null && !loginEntity.getEmail().equals("")){
+        boolean isAuthenticated = passwordEncoder.matches(requestLoginEntity.getPassword(), loginEntity.getPassword());
+
+        if(isAuthenticated == true){
             Login response = new Login(email , true);
             return new ResponseEntity(response, HttpStatus.OK);
         }
